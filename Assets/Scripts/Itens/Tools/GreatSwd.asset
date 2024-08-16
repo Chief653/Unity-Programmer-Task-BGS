@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: GreatSwd
   m_EditorClassIdentifier: 
   itemId: 3
+  value: 50
   itemName: Great Sword
   itemDesc: 50 ATK
   itemType: 0

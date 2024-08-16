@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: StoneSwd
   m_EditorClassIdentifier: 
   itemId: 2
+  value: 40
   itemName: Stone Sword
   itemDesc: 40 ATK
   itemType: 0

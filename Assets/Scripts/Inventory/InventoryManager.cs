@@ -110,6 +110,5 @@ public class InventoryManager : MonoBehaviour
 
         Debug.Log("No available slots!");
         Destroy(newItem);
-        //Mostrar aviso de inventário cheio
     }
 }

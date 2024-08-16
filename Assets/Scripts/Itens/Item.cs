@@ -11,6 +11,7 @@ public enum ItemType
 public class Item : ScriptableObject
 {
     public int itemId;
+    public float value;
     public string itemName;
     public string itemDesc;
     public ItemType itemType;

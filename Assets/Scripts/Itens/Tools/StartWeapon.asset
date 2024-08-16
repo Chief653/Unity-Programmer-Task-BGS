@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: StartWeapon
   m_EditorClassIdentifier: 
   itemId: 1
+  value: 30
   itemName: Wood Sword
   itemDesc: 30 ATK
   itemType: 0

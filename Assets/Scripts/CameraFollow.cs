@@ -15,6 +15,9 @@ public class SmoothCameraFollow : MonoBehaviour
 
     void LateUpdate()
     {
+        if(PlayerController.instance.isDead)
+            return;
+
         Vector3 targetPosition = player.position + offset;
 
         Vector3 anticipationOffset = new Vector3(

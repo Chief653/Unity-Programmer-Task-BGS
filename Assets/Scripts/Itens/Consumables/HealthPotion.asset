@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: HealthPotion
   m_EditorClassIdentifier: 
   itemId: 10
+  value: 30
   itemName: Health Potion
   itemDesc: +30 HP
   itemType: 1

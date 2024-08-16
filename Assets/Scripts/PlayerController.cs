@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class PlayerController : MonoBehaviour
 {
@@ -8,8 +9,15 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed = 5f;
     public SpriteRenderer spriteRenderer;
     public SpriteRenderer toolSprite;
-    public Image toolSpriteCanvas;
+    public Image toolSpriteCanvas, consSpriteCanvas, consSpriteShadowCanvas;
     public Sprite idleUp, idleDown, idleSide;
+    public bool isDead = false;
+    
+    public Slider healthSlider;
+    public GameObject defeatScreen;
+    private float maxHealth = 100f;
+    private float currentHealth;
+    private Tween healthTween, fillTween;
 
     private Rigidbody2D rb;
     private Animator animPlayer;
@@ -24,18 +32,34 @@ public class PlayerController : MonoBehaviour
     void Start() {
         animPlayer = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        currentHealth = maxHealth;
+        healthSlider.maxValue = maxHealth;
+        healthSlider.value = currentHealth;
+        defeatScreen.SetActive(false);
     }
 
     public void EquipItem(Item item) {
-        toolSprite.sprite = item.itemIcon;
-        toolSprite.gameObject.SetActive(true);
+        if(item.itemType == ItemType.Tool) { 
+            toolSprite.sprite = item.itemIcon;
+            toolSprite.gameObject.SetActive(true);
 
-        toolSpriteCanvas.gameObject.SetActive(true);
-        toolSpriteCanvas.sprite = item.itemIcon;
+            toolSpriteCanvas.sprite = item.itemIcon;
+            toolSpriteCanvas.gameObject.SetActive(true);
+        }
+        else {
+            consSpriteCanvas.sprite = item.itemIcon;
+            consSpriteCanvas.gameObject.SetActive(true);
+
+            consSpriteShadowCanvas.sprite = item.itemIcon;
+            consSpriteShadowCanvas.gameObject.SetActive(true);
+        }
     }
 
     void Update()
     {
+        if(isDead)
+            return;
+
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
 
@@ -52,10 +76,25 @@ public class PlayerController : MonoBehaviour
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2)) {
+            if(currentHealth >= maxHealth)
+                return;
+
+            if(healthTween.IsActive())
+                return;
+
+            if(InventoryManager.instance.equippedConsumable != null) {
+                ChangeHealth(InventoryManager.instance.equippedConsumable.value);
+            }
+        }
     }
 
     void FixedUpdate()
     {
+        if(isDead)
+            return;
+
         rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
     }
 
@@ -94,6 +133,37 @@ public class PlayerController : MonoBehaviour
         {
             animPlayer.SetInteger("Direction", 1);
             spriteRenderer.flipX = movement.x < 0;
+        }
+    }
+
+    public void ChangeHealth(float amount)
+    {
+        if (healthTween != null && healthTween.IsActive())
+        {
+            healthTween.Kill();
+        }
+
+        if (fillTween != null && fillTween.IsActive())
+        {
+            fillTween.Kill();
+        }
+
+        currentHealth += amount;
+        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+
+        healthTween = DOTween.To(() => healthSlider.value, x => healthSlider.value = x, currentHealth, 1f);
+
+        if(amount > 0) {
+            consSpriteCanvas.fillAmount = 0f;
+            fillTween = DOTween.To(() => consSpriteCanvas.fillAmount, x => consSpriteCanvas.fillAmount = x, 1f, 1f);
+        }
+
+        if (currentHealth <= 0)
+        {
+            isMoving = false;
+            isDead = true;
+            rb.velocity = Vector3.zero;
+            defeatScreen.SetActive(true);
         }
     }
 }

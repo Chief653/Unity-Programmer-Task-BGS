@@ -58,6 +58,7 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDra
         if (currentItem != null)
         {
             currentItemObject.transform.position = Input.mousePosition;
+            InventoryManager.instance.detailsObj.transform.parent.gameObject.SetActive(false);
         }
     }
 
@@ -87,6 +88,7 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDra
             ReturnToOriginalSlot();
         }
 
+        InventoryManager.instance.detailsObj.transform.parent.gameObject.SetActive(true);
         itemImage.raycastTarget = true;
     }
 
@@ -98,7 +100,7 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDra
         GameObject newSlotObject = eventData.pointerCurrentRaycast.gameObject;
 
         if (newSlotObject != null && (newSlotObject.CompareTag("Slot") || newSlotObject.CompareTag("Item"))) {
-            delayedCallTween = DOVirtual.DelayedCall(.5f, () =>
+            delayedCallTween = DOVirtual.DelayedCall(1f, () =>
             {
                 RectTransform rectTransform = InventoryManager.instance.detailsObj.GetComponent<RectTransform>();
 

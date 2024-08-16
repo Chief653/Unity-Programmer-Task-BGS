@@ -37,7 +37,10 @@ public class InventoryManager : MonoBehaviour
 
         PopulateSlots();
         NewItem(startItem);
-        NewItem(startItem);
+    }
+
+    public void OpenInventory() {
+        gameObject.SetActive(!gameObject.activeSelf);
     }
 
     void PopulateSlots()

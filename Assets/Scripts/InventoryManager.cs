@@ -5,24 +5,35 @@ using UnityEngine.UI;
 
 public class InventoryManager : MonoBehaviour
 {
+    public static InventoryManager instance;
     public List<GameObject> allTabs;
+
+    [Tooltip("Starting Item")]
     public Item startItem;
+
+    [Tooltip("Current equipped item")]
+    public Item equippedTool, equippedConsumable, equippedArmor;
     public Transform toolsParent;
     public Transform consumablesParent;
     public Transform armorsParent;
     public GameObject itemPrefab;
+    public GameObject detailsObj;
 
     [HideInInspector]
-    public List<Transform> toolSlots;
+    public List<Slot> toolSlots;
     [HideInInspector]
-    public List<Transform> consumableSlots;
+    public List<Slot> consumableSlots;
     [HideInInspector]
-    public List<Transform> armorSlots;
+    public List<Slot> armorSlots;
+
+    void Awake() {
+        instance = this;
+    }
 
     void Start() {
-        List<Transform> toolsParent = new List<Transform>();
-        List<Transform> consumablesParent = new List<Transform>();
-        List<Transform> armorsParent = new List<Transform>();
+        List<Slot> toolsParent = new List<Slot>();
+        List<Slot> consumablesParent = new List<Slot>();
+        List<Slot> armorsParent = new List<Slot>();
 
         PopulateSlots();
         NewItem(startItem);
@@ -33,17 +44,17 @@ public class InventoryManager : MonoBehaviour
     {
         foreach (Transform slot in toolsParent)
         {
-            toolSlots.Add(slot);
+            toolSlots.Add(slot.GetComponent<Slot>());
         }
 
         foreach (Transform slot in consumablesParent)
         {
-            consumableSlots.Add(slot);
+            consumableSlots.Add(slot.GetComponent<Slot>());
         }
 
         foreach (Transform slot in armorsParent)
         {
-            armorSlots.Add(slot);
+            armorSlots.Add(slot.GetComponent<Slot>());
         }
     }
 
@@ -65,30 +76,30 @@ public class InventoryManager : MonoBehaviour
         switch (item.itemType)
         {
             case ItemType.Tool:
-                AssignItemToSlot(newItem, toolSlots);
+                AssignItemToSlot(newItem, item, toolSlots);
                 break;
             case ItemType.Consumable:
-                AssignItemToSlot(newItem, consumableSlots);
+                AssignItemToSlot(newItem, item, consumableSlots);
                 break;
             case ItemType.Armor:
-                AssignItemToSlot(newItem, armorSlots);
+                AssignItemToSlot(newItem, item, armorSlots);
                 break;
         }
     }
 
-    void AssignItemToSlot(GameObject newItem, List<Transform> slots)
+    void AssignItemToSlot(GameObject newItem, Item item, List<Slot> slots)
     {
-        foreach (Transform slot in slots)
+        foreach (Slot slot in slots)
         {
-            if (slot.childCount == 0)
+            if (slot.currentItem == null)
             {
-                newItem.transform.SetParent(slot);
-                newItem.transform.localPosition = Vector3.zero;
+                slot.SetItem(item, newItem);
                 return;
             }
         }
 
         Debug.Log("No available slots!");
+        Destroy(newItem);
         //Mostrar aviso de inventário cheio
     }
 }

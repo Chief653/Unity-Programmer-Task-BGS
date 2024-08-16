@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 60f82d8978202504290b237ff21e6c9b, type: 3}
-  m_Name: StartWeapon
+  m_Name: HealthPotion
   m_EditorClassIdentifier: 
-  itemId: 1
-  itemName: Wood Sword
-  itemDesc: 30 ATK
-  itemType: 0
-  itemIcon: {fileID: -267587109, guid: 6eb16e372762d6b4cb708c44ebfab931, type: 3}
+  itemId: 10
+  itemName: Health Potion
+  itemDesc: +30 HP
+  itemType: 1
+  itemIcon: {fileID: 21300000, guid: 83669ad259d236b43be9d27ce056b9b0, type: 3}

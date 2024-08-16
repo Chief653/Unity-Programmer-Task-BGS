@@ -12,6 +12,7 @@ public class Item : ScriptableObject
 {
     public int itemId;
     public string itemName;
+    public string itemDesc;
     public ItemType itemType;
     public Sprite itemIcon;
 }

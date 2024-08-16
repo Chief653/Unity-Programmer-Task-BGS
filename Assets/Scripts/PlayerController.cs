@@ -1,9 +1,14 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController instance;
     public float moveSpeed = 5f;
     public SpriteRenderer spriteRenderer;
+    public SpriteRenderer toolSprite;
+    public Image toolSpriteCanvas;
     public Sprite idleUp, idleDown, idleSide;
 
     private Rigidbody2D rb;
@@ -12,9 +17,21 @@ public class PlayerController : MonoBehaviour
     private Vector2 lastMovementDirection;
     private bool isMoving;
 
+    void Awake() {
+        instance = this;
+    }
+
     void Start() {
         animPlayer = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
+    }
+
+    public void EquipItem(Item item) {
+        toolSprite.sprite = item.itemIcon;
+        toolSprite.gameObject.SetActive(true);
+
+        toolSpriteCanvas.gameObject.SetActive(true);
+        toolSpriteCanvas.sprite = item.itemIcon;
     }
 
     void Update()
@@ -23,13 +40,17 @@ public class PlayerController : MonoBehaviour
         movement.y = Input.GetAxisRaw("Vertical");
 
         movement = movement.normalized;
-
         isMoving = movement.sqrMagnitude > 0;
         
         if (isMoving)
         {
             lastMovementDirection = movement;
             SetWalkSprite();
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
 

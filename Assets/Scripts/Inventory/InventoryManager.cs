@@ -18,6 +18,8 @@ public class InventoryManager : MonoBehaviour
     public Transform armorsParent;
     public GameObject itemPrefab;
     public GameObject detailsObj;
+    public GameObject newItemLabel;
+    public GameObject deleteConfirmationPanel;
 
     [HideInInspector]
     public List<Slot> toolSlots;
@@ -28,15 +30,14 @@ public class InventoryManager : MonoBehaviour
 
     void Awake() {
         instance = this;
-    }
 
-    void Start() {
         List<Slot> toolsParent = new List<Slot>();
         List<Slot> consumablesParent = new List<Slot>();
         List<Slot> armorsParent = new List<Slot>();
 
         PopulateSlots();
         NewItem(startItem);
+        gameObject.SetActive(false);
     }
 
     public void OpenInventory() {
@@ -88,6 +89,12 @@ public class InventoryManager : MonoBehaviour
                 AssignItemToSlot(newItem, item, armorSlots);
                 break;
         }
+
+        if(item == startItem)
+            return;
+
+        newItemLabel.GetComponent<SetupNewItem>().SetupDet(item);
+        newItemLabel.SetActive(true);
     }
 
     void AssignItemToSlot(GameObject newItem, Item item, List<Slot> slots)

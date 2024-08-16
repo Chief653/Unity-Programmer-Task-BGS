@@ -9,6 +9,7 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDra
 {
     public Item currentItem;
     public ItemType itemType;
+
     private GameObject currentItemObject;
     private Transform originalParent;
     private Vector3 originalPosition;
@@ -82,7 +83,21 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDra
             {
                 ReturnToOriginalSlot();
             }
+        }
+        else if (newSlotObject != null && newSlotObject.CompareTag("Trash"))
+        {
+            InventoryManager.instance.deleteConfirmationPanel.GetComponent<SetupNewItem>().SetupDet(currentItem);
+            Button btn = InventoryManager.instance.deleteConfirmationPanel.GetComponent<SetupNewItem>().deleteBtn;
+
+            if (btn != null) {
+                btn.onClick.RemoveAllListeners();
+                btn.onClick.AddListener(DeleteItem);
             }
+
+            InventoryManager.instance.deleteConfirmationPanel.SetActive(true);
+            InventoryManager.instance.detailsObj.SetActive(false);
+            ReturnToOriginalSlot();
+        }
         else
         {
             ReturnToOriginalSlot();
@@ -180,6 +195,17 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDra
             }
         }
 
+        PlayerController.instance.EquipItem(currentItem);
         outline.effectColor = Color.yellow;
+    }
+
+    public void DeleteItem()
+    {
+        if (currentItem != null)
+        {
+            Destroy(currentItemObject);
+            ClearSlot();
+            InventoryManager.instance.deleteConfirmationPanel.SetActive(false);
+        }
     }
 }

@@ -24,7 +24,7 @@ public class SetupNewItem : MonoBehaviour
         }
     }
 
-    public void SimpleSetupDet(Item item) {
+    public void SimpleSetupDet(Item item) { //Used in deletion of a item
         if(newSlots.Count > 1) {
             newSlots[1].SetActive(false);
             newSlots[2].SetActive(false);

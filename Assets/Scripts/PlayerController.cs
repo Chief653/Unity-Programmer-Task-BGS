@@ -55,8 +55,24 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void UnequipItem(Item item) {
+        if(item.itemType == ItemType.Tool) { 
+            toolSprite.gameObject.SetActive(false);
+            toolSpriteCanvas.gameObject.SetActive(false);
+        }
+        else if(item.itemType == ItemType.Consumable) {
+            consSpriteCanvas.gameObject.SetActive(false);
+            consSpriteShadowCanvas.gameObject.SetActive(false);
+        }
+    }
+
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
         if(isDead)
             return;
 
@@ -70,11 +86,6 @@ public class PlayerController : MonoBehaviour
         {
             lastMovementDirection = movement;
             SetWalkSprite();
-        }
-
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2)) {

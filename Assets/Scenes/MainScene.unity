@@ -9407,7 +9407,6 @@ MonoBehaviour:
   interactText: {fileID: 497760878}
   itemToGive:
   - {fileID: 11400000, guid: 616a6c94f84512f40a358d1984076105, type: 2}
-  - {fileID: 11400000, guid: 540bb17d36e5464448e6821b010c4932, type: 2}
 --- !u!61 &2032254007
 BoxCollider2D:
   m_ObjectHideFlags: 0

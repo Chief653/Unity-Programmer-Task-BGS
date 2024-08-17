@@ -203,6 +203,7 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDra
     {
         if (currentItem != null)
         {
+            PlayerController.instance.UnequipItem(currentItem);
             Destroy(currentItemObject);
             ClearSlot();
             InventoryManager.instance.deleteConfirmationPanel.SetActive(false);

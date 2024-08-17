@@ -14,6 +14,11 @@ public class SetupNewItem : MonoBehaviour
     public void SetupDet(List<Item> itemToGive) {
         int index = 0;
 
+        foreach (GameObject obj in newSlots)
+        {
+            obj.SetActive(false);
+        }
+
         foreach (Item item in itemToGive)
         {
             itemNameTxt[index].text = item.itemName;
@@ -26,8 +31,13 @@ public class SetupNewItem : MonoBehaviour
 
     public void SimpleSetupDet(Item item) { //Used in deletion of a item
         if(newSlots.Count > 1) {
-            newSlots[1].SetActive(false);
-            newSlots[2].SetActive(false);
+            foreach (GameObject obj in newSlots)
+            {
+                if (obj != newSlots[0])
+                {
+                    obj.SetActive(false);
+                }
+            }
         }
 
         itemNameTxt[0].text = item.itemName;

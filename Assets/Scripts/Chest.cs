@@ -30,6 +30,11 @@ public class Chest : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            if(isChestOpened) {
+                interactText.SetActive(false);
+                return;
+            }
+
             isPlayerInRange = true;
             interactText.SetActive(true);
         }

@@ -89,12 +89,6 @@ public class InventoryManager : MonoBehaviour
                 AssignItemToSlot(newItem, item, armorSlots);
                 break;
         }
-
-        if(item == startItem)
-            return;
-
-        newItemLabel.GetComponent<SetupNewItem>().SetupDet(item);
-        newItemLabel.SetActive(true);
     }
 
     void AssignItemToSlot(GameObject newItem, Item item, List<Slot> slots)
@@ -108,7 +102,6 @@ public class InventoryManager : MonoBehaviour
             }
         }
 
-        Debug.Log("No available slots!");
         Destroy(newItem);
     }
 }

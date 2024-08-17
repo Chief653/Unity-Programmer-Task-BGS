@@ -78,14 +78,17 @@ public class PlayerController : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2)) {
-            if(currentHealth >= maxHealth)
-                return;
-
-            if(healthTween.IsActive())
-                return;
 
             if(InventoryManager.instance.equippedConsumable != null) {
-                ChangeHealth(InventoryManager.instance.equippedConsumable.value);
+                if(InventoryManager.instance.equippedConsumable.consumableType == ConsumableType.Health) {
+                    if(currentHealth >= maxHealth)
+                        return;
+
+                    ChangeHealth(InventoryManager.instance.equippedConsumable.value);
+                }
+                else if(InventoryManager.instance.equippedConsumable.consumableType == ConsumableType.Speed) {
+                    ModifyPlayerSpeed(InventoryManager.instance.equippedConsumable.value, InventoryManager.instance.equippedConsumable.timeEffect);
+                }
             }
         }
     }
@@ -138,10 +141,8 @@ public class PlayerController : MonoBehaviour
 
     public void ChangeHealth(float amount)
     {
-        if (healthTween != null && healthTween.IsActive())
-        {
-            healthTween.Kill();
-        }
+        if(healthTween.IsActive())
+            return;
 
         if (fillTween != null && fillTween.IsActive())
         {
@@ -165,5 +166,26 @@ public class PlayerController : MonoBehaviour
             rb.velocity = Vector3.zero;
             defeatScreen.SetActive(true);
         }
+    }
+
+    public void ModifyPlayerSpeed(float speedMultiplier, float duration)
+    {
+        if (fillTween != null && fillTween.IsActive())
+            return;
+
+        moveSpeed *= speedMultiplier;
+
+        consSpriteCanvas.fillAmount = 0f;
+        fillTween = DOTween.To(() => consSpriteCanvas.fillAmount, x => consSpriteCanvas.fillAmount = x, 1f, duration);
+
+        DOVirtual.DelayedCall(duration, () =>
+        {
+            moveSpeed /= speedMultiplier;
+
+            if (fillTween.IsActive())
+            {
+                fillTween.Kill();
+            }
+        });
     }
 }

@@ -86,7 +86,7 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDra
         }
         else if (newSlotObject != null && newSlotObject.CompareTag("Trash"))
         {
-            InventoryManager.instance.deleteConfirmationPanel.GetComponent<SetupNewItem>().SetupDet(currentItem);
+            InventoryManager.instance.deleteConfirmationPanel.GetComponent<SetupNewItem>().SimpleSetupDet(currentItem);
             Button btn = InventoryManager.instance.deleteConfirmationPanel.GetComponent<SetupNewItem>().deleteBtn;
 
             if (btn != null) {

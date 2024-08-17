@@ -1,10 +1,12 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 public class Chest : MonoBehaviour
 {
     public Sprite openChestSprite;
     public GameObject interactText;
-    public Item itemToGive;
+    public List<Item> itemToGive;
 
     private bool isPlayerInRange = false;
     private bool isChestOpened = false;
@@ -52,6 +54,12 @@ public class Chest : MonoBehaviour
 
     void GiveItemToPlayer()
     {
-        InventoryManager.instance.NewItem(itemToGive);
+        foreach (Item item in itemToGive)
+        {
+            InventoryManager.instance.NewItem(item);
+        }
+
+        InventoryManager.instance.newItemLabel.GetComponent<SetupNewItem>().SetupDet(itemToGive);
+        InventoryManager.instance.newItemLabel.SetActive(true);
     }
 }

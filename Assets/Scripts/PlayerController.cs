@@ -95,7 +95,7 @@ public class PlayerController : MonoBehaviour
                     if(currentHealth >= maxHealth)
                         return;
 
-                    ChangeHealth(InventoryManager.instance.equippedConsumable.value);
+                    ReceiveHealth(InventoryManager.instance.equippedConsumable.value);
                 }
                 else if(InventoryManager.instance.equippedConsumable.consumableType == ConsumableType.Speed) {
                     ModifyPlayerSpeed(InventoryManager.instance.equippedConsumable.value, InventoryManager.instance.equippedConsumable.timeEffect);
@@ -150,25 +150,32 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void ChangeHealth(float amount)
+    public void ReceiveHealth(float amount)
     {
         if(healthTween.IsActive())
             return;
 
         if (fillTween != null && fillTween.IsActive())
-        {
-            fillTween.Kill();
-        }
+            return;
 
         currentHealth += amount;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
 
         healthTween = DOTween.To(() => healthSlider.value, x => healthSlider.value = x, currentHealth, 1f);
 
-        if(amount > 0) {
-            consSpriteCanvas.fillAmount = 0f;
-            fillTween = DOTween.To(() => consSpriteCanvas.fillAmount, x => consSpriteCanvas.fillAmount = x, 1f, 1f);
-        }
+        consSpriteCanvas.fillAmount = 0f;
+        fillTween = DOTween.To(() => consSpriteCanvas.fillAmount, x => consSpriteCanvas.fillAmount = x, 1f, 1f);
+    }
+
+    public void LostHealth(float amount)
+    {
+        if(healthTween.IsActive())
+            healthTween.Kill();
+
+        currentHealth += amount;
+        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+
+        healthTween = DOTween.To(() => healthSlider.value, x => healthSlider.value = x, currentHealth, 1f);
 
         if (currentHealth <= 0)
         {

@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using DG.Tweening;
+using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour
 {
@@ -177,13 +179,28 @@ public class PlayerController : MonoBehaviour
 
         healthTween = DOTween.To(() => healthSlider.value, x => healthSlider.value = x, currentHealth, 1f);
 
+        GetComponent<AudioSource>().Play();
+
         if (currentHealth <= 0)
         {
             isMoving = false;
             isDead = true;
             rb.velocity = Vector3.zero;
             defeatScreen.SetActive(true);
+            spriteRenderer.color = Color.black;
         }
+        else
+        {
+            StartCoroutine(FlashRed());
+        }
+    }
+
+    private IEnumerator FlashRed()
+    {
+        Color originalColor = spriteRenderer.color;
+        spriteRenderer.color = Color.red;
+        yield return new WaitForSeconds(0.25f);
+        spriteRenderer.color = originalColor;
     }
 
     public void ModifyPlayerSpeed(float speedMultiplier, float duration)

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class Chest : MonoBehaviour
 {
@@ -51,6 +52,38 @@ public class Chest : MonoBehaviour
 
     void OpenChest()
     {
+        bool hasSpace = true;
+
+        foreach (Item item in itemToGive)
+        {
+            bool slotAvailable = false;
+
+            switch (item.itemType)
+            {
+                case ItemType.Tool:
+                    slotAvailable = InventoryManager.instance.toolSlots.Any(slot => slot.currentItem == null);
+                    break;
+                case ItemType.Consumable:
+                    slotAvailable = InventoryManager.instance.consumableSlots.Any(slot => slot.currentItem == null);
+                    break;
+                case ItemType.Armor:
+                    slotAvailable = InventoryManager.instance.armorSlots.Any(slot => slot.currentItem == null);
+                    break;
+            }
+
+            if (!slotAvailable)
+            {
+                hasSpace = false;
+                break;
+            }
+        }
+
+        if (!hasSpace)
+        {
+            InventoryManager.instance.popupNoSpace.SetActive(true);
+            return;
+        }
+
         spriteRenderer.sprite = openChestSprite;
         isChestOpened = true;
         interactText.SetActive(false);

@@ -74,14 +74,21 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDra
         {
             Slot newSlot = newSlotObject.GetComponent<Slot>();
 
-            if (newSlot != null && newSlot.currentItem == null)
+            if (newSlot != null)
             {
-                newSlot.SetItem(currentItem, currentItemObject);
-                ClearSlot();
-            }
-            else
-            {
-                ReturnToOriginalSlot();
+                if (newSlot.currentItem == null)
+                {
+                    newSlot.SetItem(currentItem, currentItemObject);
+                    ClearSlot();
+                }
+                else
+                {
+                    Item tempItem = newSlot.currentItem;
+                    GameObject tempItemObject = newSlot.currentItemObject;
+
+                    newSlot.SetItem(currentItem, currentItemObject);
+                    SetItem(tempItem, tempItemObject);
+                }
             }
         }
         else if (newSlotObject != null && newSlotObject.CompareTag("Trash"))
@@ -89,7 +96,8 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDra
             InventoryManager.instance.deleteConfirmationPanel.GetComponent<SetupNewItem>().SimpleSetupDet(currentItem);
             Button btn = InventoryManager.instance.deleteConfirmationPanel.GetComponent<SetupNewItem>().deleteBtn;
 
-            if (btn != null) {
+            if (btn != null) 
+            {
                 btn.onClick.RemoveAllListeners();
                 btn.onClick.AddListener(DeleteItem);
             }

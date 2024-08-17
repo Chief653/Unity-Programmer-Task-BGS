@@ -20,6 +20,7 @@ public class InventoryManager : MonoBehaviour
     public GameObject detailsObj;
     public GameObject newItemLabel;
     public GameObject deleteConfirmationPanel;
+    public GameObject popupNoSpace;
 
     [HideInInspector]
     public List<Slot> toolSlots;

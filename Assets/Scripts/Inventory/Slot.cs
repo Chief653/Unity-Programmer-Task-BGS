@@ -70,8 +70,12 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDra
 
         GameObject newSlotObject = eventData.pointerCurrentRaycast.gameObject;
 
-        if (newSlotObject != null && newSlotObject.CompareTag("Slot"))
+        if (newSlotObject != null && (newSlotObject.CompareTag("Slot") || newSlotObject.CompareTag("Item")))
         {
+            if(newSlotObject.CompareTag("Item")) {
+                newSlotObject = newSlotObject.transform.parent.gameObject;
+            }
+
             Slot newSlot = newSlotObject.GetComponent<Slot>();
 
             if (newSlot != null)

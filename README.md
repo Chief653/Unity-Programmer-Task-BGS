@@ -3,3 +3,6 @@ Essay on the development of this project for BGS:
 
 Link to download the game build for the requested task:
 https://drive.google.com/file/d/1goMi6oOM-W6eOMX1hwVwqWmBgTIOwFuB/view?usp=sharing
+
+Link to video pitch:
+https://youtu.be/3sG3fboAjkk
